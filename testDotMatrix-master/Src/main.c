@@ -482,9 +482,9 @@ char BufferHum[100];
   MX_ADC1_Init();
   MX_I2C1_Init();
   MX_RTC_Init();
-	
+	DWT_Delay_Init();
   /* USER CODE BEGIN 2 */
-DWT_Delay_Init();
+
 uint32_t samplingTime = 280;
 uint32_t deltaTime = 40;
 uint32_t sleepTime = 9680;
@@ -497,12 +497,12 @@ int Imax[4] = {25,50,100,200};
 int Imin[4] = {0,26,51,101};
 int Cmax[4] = {25,37,50,90};
 int Cmin[4] = {0,26,38,51};
-char BufferAQI[100],n;
+char BufferAQI[100],n,check[50];
 	 max_init (0x03);
 	cmdBuffer[0] = 0x03;
 	cmdBuffer[1] = 0x00;
 	cmdBuffer[2] = 0x04;
-int mode = 5;
+
 
 
 if(HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2)
@@ -524,6 +524,42 @@ if(HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		sprintf(check,"Mode: %d",mode);
+		HAL_UART_Transmit(&huart3,(uint8_t *)check,strlen(check),100);
+		while(alarm == 1)
+		{
+			to_do_alarm();
+		}
+
+		if ( mode == 0 ) {
+			get_time();
+			while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET) {}
+			HAL_UART_Transmit(&huart3, (uint8_t*) timebuff ,30,1000);
+			HAL_Delay(1000);
+		}
+		
+		else if (mode == 1) {
+			get_time();
+			while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET) {}
+			HAL_UART_Transmit(&huart3, (uint8_t*) timebuff ,30,1000);
+			if(set>0){
+			set_time();}
+			HAL_Delay(1000);
+		}
+		else if (mode == 2){
+			get_time();
+			HAL_UART_Transmit(&huart3, (uint8_t*) datebuff ,30,1000);
+			if(set>0)
+			{set_time();}
+			
+		}
+		else if(mode == 3) {
+			checkstate_timer();
+		} 
+		else if(mode == 4) {
+			set_alarm();
+		}else if(mode == 5){
+		
 		sprintf(BufferTemp,"Temperature:%4.1f",t);
 		scroll_string((uint8_t *)BufferTemp,150,left);
 		HAL_Delay(100);
@@ -532,7 +568,7 @@ if(HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2)
 		scroll_string((uint8_t *)BufferHum,150,left);
 		HAL_Delay(100);
 		scroll_string((uint8_t *)"               ",1,left);
-		HAL_Delay(5000);
+		//HAL_Delay(5000);
 		HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
 		
 		//Wake up Sensor
@@ -556,7 +592,7 @@ if(HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2)
 			uint16_t humidity = (dataBuffer[2] << 8) + dataBuffer[3];
 			h = humidity/10.0;
 		}
-	
+	}else if(mode == 6){
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_RESET);
 		DWT_Delay_us(samplingTime);
 		
@@ -586,10 +622,11 @@ if(HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2)
 			
 		}				
 		sprintf(BufferAQI,"AQI: %d",AQI);
+		HAL_UART_Transmit(&huart3,(uint8_t *)BufferAQI,strlen(BufferAQI),200);
 		scroll_string((uint8_t *)BufferAQI,150,left);
 		HAL_Delay(100);
 		scroll_string((uint8_t *)"               ",1,left);
-		
+	}
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
