@@ -32,6 +32,8 @@ dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c.h
 dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h
 dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h
 dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h
+dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rtc.h
+dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rtc_ex.h
 dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h
 dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
 dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h
@@ -40,6 +42,7 @@ dotmatrix\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h
 dotmatrix\main.o: ../Inc/adc.h
 dotmatrix\main.o: ../Inc/eth.h
 dotmatrix\main.o: ../Inc/i2c.h
+dotmatrix\main.o: ../Inc/rtc.h
 dotmatrix\main.o: ../Inc/usart.h
 dotmatrix\main.o: ../Inc/usb_otg.h
 dotmatrix\main.o: ../Inc/gpio.h

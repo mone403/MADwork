@@ -32,6 +32,8 @@ dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i
 dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h
 dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h
 dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h
+dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rtc.h
+dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rtc_ex.h
 dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h
 dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
 dotmatrix\dwt_stm32_delay.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h

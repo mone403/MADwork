@@ -9,7 +9,8 @@
   * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
+  * This software component is licens
+ed by ST under BSD 3-Clause license,
   * the "License"; You may not use this file except in compliance with the
   * License. You may obtain a copy of the License at:
   *                        opensource.org/licenses/BSD-3-Clause
@@ -59,10 +60,15 @@ char datebuff[50];
 char timerbuff[50];
 char alarmbuff[50];
 char backtime[50];
+char hoursbuff[50];
+char minutebuff[50];
+char daybuff[50];
+char monthbuff[50];
+char yearbuff[50];
 int state = 0;
 uint8_t alarm = 0;
 int set = 0; // in clock
-int mode = 0; // change mode
+int mode = 1; // change mode
 int set_timer = 0;
 uint16_t setHours = 0x10; 
 uint16_t setMinutes = 0x20; 
@@ -104,6 +110,12 @@ void set_time (void){
 //	setMonth = RTC_MONTH_NOVEMBER;
 //	setYear = 0x19;
 	if(mode == 1 && set == 1) {
+		sprintf(hoursbuff,"%02d",setHours);
+		max_clear();
+		HAL_Delay(200);
+		write_char(hoursbuff[0],3);
+		write_char(hoursbuff[1],2);
+		HAL_Delay(200);
 		if(HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_1) == 1) {
 			setHours += 0x1;
 			HAL_Delay(500);
@@ -120,6 +132,12 @@ void set_time (void){
 		}
 	}
 	else if(mode == 1 && set == 2) {
+		sprintf(minutebuff,"%02d",setMinutes);
+		max_clear();
+		HAL_Delay(200);
+		write_char(minutebuff[0],3);
+		write_char(minutebuff[1],2);
+		HAL_Delay(200);
 		if(HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_1) == 1) {
 			setMinutes += 0x1;
 			HAL_Delay(500);
@@ -136,6 +154,12 @@ void set_time (void){
 		}
 	}
 	if(mode == 2 && set == 1) {
+		sprintf(daybuff,"%02d",setDate);
+		max_clear();
+		HAL_Delay(200);
+		write_char(daybuff[0],3);
+		write_char(daybuff[1],2);
+		HAL_Delay(200);
 		if(HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_1) == 1) {
 			setDate += 0x1;
 			HAL_Delay(500);
@@ -163,6 +187,12 @@ void set_time (void){
 		
 	}
 	else if(mode == 2 && set == 2) {
+		sprintf(monthbuff,"%02d",setMonth);
+		max_clear();
+		HAL_Delay(200);
+		write_char(monthbuff[0],3);
+		write_char(monthbuff[1],2);
+		HAL_Delay(200);
 		if(HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_1) == 1) {
 				setMonth += 0x1;
 				HAL_Delay(500);
@@ -179,6 +209,14 @@ void set_time (void){
 			}
 	}
 	else if(mode == 2 && set == 3){
+		sprintf(yearbuff,"%d",setYear+2000);
+		max_clear();
+		HAL_Delay(200);
+		write_char(yearbuff[0],4);
+		write_char(yearbuff[1],3);
+		write_char(yearbuff[2],2);
+		write_char(yearbuff[3],1);
+		HAL_Delay(200);
 		if(HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_1) == 1) {
 			setYear += 0x1;
 		}
@@ -273,7 +311,8 @@ void set_alarm (void)
   {
     Error_Handler();
   }
-	get_alarm();
+	if(set>0){
+	get_alarm();}
 	
   /* USER CODE BEGIN RTC_Init 5 */
 
@@ -329,8 +368,6 @@ void timer_down (void) {
 }
 
 void checkstate_timer (void) {
-
-	
 	if(mode == 3 && set == 1){
 		if(HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_1) == GPIO_PIN_SET ) {
 			timer_minute += 1;
@@ -384,28 +421,40 @@ void checkstate_timer (void) {
 		if(state == 1){
 			timer_minute = 0; timer_second = 0; 
 		}
-		sprintf(backtime, "Timer stop : %02d : %02d\n\r" , timer_minute, timer_second);
-		HAL_UART_Transmit(&huart3, (uint8_t*) backtime ,30,1000);
-		HAL_Delay(1000);
-		HAL_UART_Transmit(&huart3, (uint8_t*) '\r' ,2,1000);}
+		sprintf(backtime, "Timer stop : %02d : %02d" , timer_minute, timer_second);
+		scroll_string((uint8_t *)backtime,50,left);
+		HAL_Delay(500);
+		scroll_string((uint8_t *)"                 ",1,left);
+//		HAL_UART_Transmit(&huart3, (uint8_t*) backtime ,30,1000);
+//		HAL_Delay(500);
+//		HAL_UART_Transmit(&huart3, (uint8_t*) '\r' ,2,1000);}
 	}
 	get_timer();
+	}
 }
 void get_alarm(void) {
 	RTC_AlarmTypeDef setAlarm;
 	HAL_RTC_GetAlarm(&hrtc, &setAlarm, RTC_ALARM_A , RTC_FORMAT_BIN);
-	sprintf(alarmbuff, "Alarm : %02d : %02d\n\r" , setAlarm.AlarmTime.Hours, setAlarm.AlarmTime.Minutes);
-	HAL_UART_Transmit(&huart3, (uint8_t*) alarmbuff ,30,1000);
-	HAL_Delay(1000);
+	
+	sprintf(alarmbuff, "%02d : %02d" , setAlarm.AlarmTime.Hours, setAlarm.AlarmTime.Minutes);
+	scroll_string((uint8_t *)"Alarm",50,left);
+	// HAL_Delay(500);
+	scroll_string((uint8_t *)"                 ",1,left);
+	
+	scroll_string((uint8_t *)alarmbuff,50,left);
+	// HAL_Delay(500);
+	scroll_string((uint8_t *)"                 ",1,left);
+//	HAL_UART_Transmit(&huart3, (uint8_t*) alarmbuff ,30,1000);
+//	HAL_Delay(1000);
 	// HAL_UART_Transmit(&huart3, (uint8_t*) '\r' ,2,1000);
 }
 
 
 void get_timer(void) {
-	sprintf(timerbuff, "Timer : %02d : %02d\r" , timer_minute, timer_second);
-	HAL_UART_Transmit(&huart3, (uint8_t*) timerbuff ,30,1000);
-	HAL_Delay(1000);
-	HAL_UART_Transmit(&huart3, (uint8_t*) '\r' ,2,1000);
+	sprintf(timerbuff, "%02d%02d" , timer_minute, timer_second);
+//	HAL_UART_Transmit(&huart3, (uint8_t*) timerbuff ,30,1000);
+//	//HAL_Delay(1000);
+//	HAL_UART_Transmit(&huart3, (uint8_t*) '\r' ,2,1000);
 }
 
 // current value
@@ -419,9 +468,9 @@ void get_time(void)
 	// get RTC current Date
 	HAL_RTC_GetDate(&hrtc, &gDate, RTC_FORMAT_BIN);
 	// format hh:mm:ss
-	sprintf(timebuff, "Time : %02d:%02d:%02d\r", gTime.Hours , gTime.Minutes, gTime.Seconds);
+	sprintf(timebuff, "%02d%02d", gTime.Hours , gTime.Minutes);
 	// format dd - mm - yy
-	sprintf(datebuff, "Date : %02d-%02d-%2d\r", gDate.Date , gDate.Month, 2000 + gDate.Year);
+	sprintf(datebuff, "%02d-%02d-%2d", gDate.Date , gDate.Month, 2000 + gDate.Year);
 }
 
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc) {
@@ -483,11 +532,12 @@ char BufferHum[100];
   MX_I2C1_Init();
   MX_RTC_Init();
 	DWT_Delay_Init();
-  /* USER CODE BEGIN 2 */
 
+  /* USER CODE BEGIN 2 */
 uint32_t samplingTime = 280;
 uint32_t deltaTime = 40;
 uint32_t sleepTime = 9680;
+
 
 int voMeasured = 0;
 float calcVoltage = 0;
@@ -503,7 +553,7 @@ char BufferAQI[100],n,check[50];
 	cmdBuffer[1] = 0x00;
 	cmdBuffer[2] = 0x04;
 
-
+HAL_ADC_Start(&hadc1);
 
 if(HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2)
 	{
@@ -531,42 +581,90 @@ if(HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2)
 			to_do_alarm();
 		}
 
-		if ( mode == 0 ) {
-			get_time();
-			while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET) {}
-			HAL_UART_Transmit(&huart3, (uint8_t*) timebuff ,30,1000);
-			HAL_Delay(1000);
-		}
+//		while( mode == 0 ) {
+//			get_time();
+//			write_char('T',4);
+//			write_char('I',3);
+//			write_char('M',2);
+//			write_char('E',1);
+//			
+//			while(mode == 0){
+//			max_clear();
+//			HAL_Delay(100);
+//			write_char(timebuff[0],4);
+//			write_char(timebuff[1],3);
+//			write_char(timebuff[2],2);
+//			write_char(timebuff[3],1);
+//			HAL_Delay(500);
+//			
+//		
+//			}
+//			while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET) {}
+//			HAL_UART_Transmit(&huart3, (uint8_t*) timebuff ,30,1000);
+//			HAL_Delay(1000);
+//		}
 		
-		else if (mode == 1) {
+		while(mode == 1) {
 			get_time();
-			while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET) {}
-			HAL_UART_Transmit(&huart3, (uint8_t*) timebuff ,30,1000);
-			if(set>0){
-			set_time();}
-			HAL_Delay(1000);
+			write_char('T',4);
+			write_char('I',3);
+			write_char('M',2);
+			write_char('E',1);
+			HAL_Delay(500);
+			while(mode == 1 && set == 0){
+			max_clear();
+			HAL_Delay(100);
+			write_char(timebuff[0],4);
+			write_char(timebuff[1],3);
+			write_char(timebuff[2],2);
+			write_char(timebuff[3],1);
+			HAL_Delay(500);
+//			while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET) {}
+//			HAL_UART_Transmit(&huart3, (uint8_t*) timebuff ,30,1000);
 		}
-		else if (mode == 2){
+			while(set>0){
+				set_time();
+			}
+//			HAL_Delay(1000);
+		}
+		while(mode == 2){
 			get_time();
-			HAL_UART_Transmit(&huart3, (uint8_t*) datebuff ,30,1000);
-			if(set>0)
+//			get_time();
+			write_char('D',4);
+			write_char('A',3);
+			write_char('T',2);
+			write_char('E',1);
+			HAL_Delay(500);
+//			scroll_string((uint8_t *)"Set Date ",30,left);
+//			HAL_Delay(300);
+//			scroll_string((uint8_t *)"                 ",1,left);
+			scroll_string((uint8_t *)datebuff,30,left);
+			scroll_string((uint8_t *)"                 ",1,left);
+//			HAL_UART_Transmit(&huart3, (uint8_t*) datebuff ,30,1000);
+			while(set>0)
 			{set_time();}
 			
 		}
-		else if(mode == 3) {
+		while(mode == 3) {
+			scroll_string((uint8_t *)"Timer",50,left);
+			HAL_Delay(500);
+			scroll_string((uint8_t *)"                 ",1,left); 
+			if(set >= 0){
 			checkstate_timer();
+			}
+			
 		} 
-		else if(mode == 4) {
+		while(mode == 4) {
 			set_alarm();
-		}else if(mode == 5){
+		}while(mode == 5){
 		
 		sprintf(BufferTemp,"Temperature:%4.1f",t);
-		scroll_string((uint8_t *)BufferTemp,150,left);
-		HAL_Delay(100);
+		scroll_string((uint8_t *)BufferTemp,50,left);
+		// HAL_Delay(100);
 		scroll_string((uint8_t *)"               ",1,left);
 		sprintf(BufferHum,"Humidity:%4.1f",h);
-		scroll_string((uint8_t *)BufferHum,150,left);
-		HAL_Delay(100);
+		scroll_string((uint8_t *)BufferHum,50,left);
+		// HAL_Delay(100);
 		scroll_string((uint8_t *)"               ",1,left);
 		//HAL_Delay(5000);
 		HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
@@ -592,13 +690,12 @@ if(HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0x32F2)
 			uint16_t humidity = (dataBuffer[2] << 8) + dataBuffer[3];
 			h = humidity/10.0;
 		}
-	}else if(mode == 6){
+	}while(mode == 6){
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_RESET);
 		DWT_Delay_us(samplingTime);
 		
 		while(HAL_ADC_PollForConversion(&hadc1,100)!= HAL_OK){}
 		voMeasured = HAL_ADC_GetValue(&hadc1);
-		
 		
 		DWT_Delay_us(deltaTime);
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_SET);
@@ -747,7 +844,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		 // clear set init --> 0
 		mode +=1;
 		if (mode > 6) {
-			mode = 0;
+			mode = 1;
 		}
 	}
 	// set in function

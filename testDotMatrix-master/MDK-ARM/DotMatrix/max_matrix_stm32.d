@@ -33,6 +33,8 @@ dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_
 dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h
 dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h
 dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h
+dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rtc.h
+dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rtc_ex.h
 dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h
 dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
 dotmatrix\max_matrix_stm32.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h

@@ -30,19 +30,33 @@ Build target 'DotMatrix'
 compiling main.c...
 ..\..\testDotMatrix-master\dwt_stm32_delay.h(42): warning:  #1-D: last line of file ends without a newline
   #endif
-../Src/main.c(64): warning:  #1295-D: Deprecated declaration Clock_Metrix_Display - give arg types
+../Src/main.c(95): warning:  #1295-D: Deprecated declaration Clock_Metrix_Display - give arg types
   void Clock_Metrix_Display();
-../Src/main.c(188): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Src/main.c(96): warning:  #1295-D: Deprecated declaration get_timer - give arg types
+  void get_timer();
+../Src/main.c(97): warning:  #1295-D: Deprecated declaration get_alarm - give arg types
+  void get_alarm();
+../Src/main.c(130): warning:  #186-D: pointless comparison of unsigned integer with zero
+  		if(setHours < 0x0) {
+../Src/main.c(152): warning:  #186-D: pointless comparison of unsigned integer with zero
+  		if(setMinutes < 0x0){
+../Src/main.c(272): warning:  #186-D: pointless comparison of unsigned integer with zero
+  			if(set_alarm_Hours < 0x0) {
+../Src/main.c(290): warning:  #186-D: pointless comparison of unsigned integer with zero
+  			if(set_alarm_minute < 0x0){
+../Src/main.c(381): warning:  #186-D: pointless comparison of unsigned integer with zero
+  		else if(timer_minute <0 ) {
+../Src/main.c(396): warning:  #186-D: pointless comparison of unsigned integer with zero
+  		else if(timer_second <0 ) {
+../Src/main.c(705): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   		dustDensity = ((0.17*calcVoltage) - 0.1)*100;
-../Src/main.c(123): warning:  #177-D: variable "n"  was declared but never referenced
-  char BufferAQI[100],n;
-../Src/main.c(128): warning:  #177-D: variable "mode"  was declared but never referenced
-  int mode = 5;
-../Src/main.c: 5 warnings, 0 errors
+../Src/main.c(550): warning:  #177-D: variable "n"  was declared but never referenced
+  char BufferAQI[100],n,check[50];
+../Src/main.c: 12 warnings, 0 errors
 linking...
-Program Size: Code=16700 RO-data=624 RW-data=1040 ZI-data=2560  
+Program Size: Code=21432 RO-data=624 RW-data=1080 ZI-data=3096  
 FromELF: creating hex file...
-"DotMatrix\DotMatrix.axf" - 0 Error(s), 5 Warning(s).
+"DotMatrix\DotMatrix.axf" - 0 Error(s), 12 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -65,7 +79,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:08
+Build Time Elapsed:  00:00:10
 </pre>
 </body>
 </html>
